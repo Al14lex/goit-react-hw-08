@@ -2,9 +2,9 @@ import { Formik, Form, Field } from 'formik';
 import { useId } from "react";
 import * as Yup from "yup";
 import { ErrorMessage } from "formik";
-import { addContact } from "../../redux/contactsOps";
 import { useDispatch } from "react-redux";
-// import axios from 'axios';
+import { addContact } from '../../redux/contacts/operations';
+
 
 const FeedbackSchema = Yup.object().shape({
   username: Yup.string().matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ").min(3, "Too Short!").max(50, "Too Long!").required("Required"),
