@@ -5,8 +5,9 @@ import Layout from "./components/Layout/Layout";
 import { lazy, Suspense } from "react";
 import { Route, Routes, Navigate  } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { selectIsLoggedIn } from './redux/auth/selectors';
+import { selectIsLoggedIn, selectIsRefreshing } from './redux/auth/selectors';
 import { persistor } from './redux/store';
+import { refreshUser } from './redux/auth/operations';
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const RegistrationPage = lazy(() => import("./pages/RegistrationPage"));
@@ -16,6 +17,7 @@ const ContactsPage = lazy(() => import("./pages/ContactsPage"));
 export default function App() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isRefreshing = useSelector(selectIsRefreshing)
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -27,6 +29,14 @@ export default function App() {
     persistor.persist(); 
   }, []);
 
+  useEffect(() => {
+    dispatch(refreshUser())
+  }, [dispatch])
+
+  if (isRefreshing) {
+    return null;
+  }
+  
   return (
      <Layout>
       <Toaster position="top-right" reverseOrder={false} />
