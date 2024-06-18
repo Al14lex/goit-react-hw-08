@@ -1,15 +1,15 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { contactReducer } from "./contacts/slice";
+import contactReducer  from "./contacts/slice";
 import { filterReducer } from "./filters/slice";
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // localStorage for web
+import storage from 'redux-persist/lib/storage'; 
 import persistStore from "redux-persist/es/persistStore";
 import authReducer from "./auth/slice";
 
 const contactsPersistConfig = {
   key: "contacts",
   storage,
-  whitelist: ['items'],
+  whitelist: ['items', 'contactsLoaded'],
 };
 const authPersistConfig = {
   key: "auth",

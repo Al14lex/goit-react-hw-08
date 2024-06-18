@@ -9,6 +9,12 @@ const contactsSlice = createSlice({
     items: [],
     loading: false,
     error: null,
+    contactsLoaded: false,
+  },
+  reducers: {
+    setContactsLoaded(state) {
+      state.contactsLoaded = true;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -18,7 +24,9 @@ const contactsSlice = createSlice({
       })
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload;
+        if (action.payload) { 
+          state.items = action.payload;
+        }
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.loading = false;
@@ -51,6 +59,5 @@ const contactsSlice = createSlice({
   },
 });
 
-
-export const contactReducer = contactsSlice.reducer;
+export const { setContactsLoaded } = contactsSlice.actions;
 export default contactsSlice.reducer;

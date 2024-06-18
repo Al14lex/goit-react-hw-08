@@ -52,7 +52,7 @@ const authSlice = createSlice({
       })
       .addCase(refreshUser.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.isLoading = true;
+        state.isLoggedIn = true;
         state.isRefreshing = false;
   })
 });

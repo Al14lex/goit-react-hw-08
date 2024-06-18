@@ -4,17 +4,20 @@ import PageTitle from "../components/PageTitle/PageTitle";
 import ContactForm from "../components/ContactForm/ContactForm";
 import ContactList from "../components/ContactList/ContactList"
 import { fetchContacts } from "../redux/contacts/operations";
-import { selectLoading } from "../redux/contacts/selectors";
+import { selectLoading, selectContactsLoaded} from "../redux/contacts/selectors";
 import SearchBox from "../components/SearchBox/SearchBox"
 
 export default function ContactsPage() {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectLoading);
+  const contactsLoaded = useSelector(selectContactsLoaded);
 
   useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
-
+    if (!contactsLoaded) {
+      dispatch(fetchContacts());
+    }
+  }, [dispatch, contactsLoaded]);
+  
   return (
     <>
       <PageTitle>Your contacts</PageTitle>
