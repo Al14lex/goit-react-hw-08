@@ -1,6 +1,12 @@
-.form{
+
+.form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     align-items: flex-end;
+    max-width: fit-content;
+}
+
+.label>input {
+    margin-left: 10px;
 }
