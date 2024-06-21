@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchContacts } from './redux/contacts/operations';
 import Layout from "./components/Layout/Layout";
 import { lazy, Suspense } from "react";
-import { Route, Routes, Navigate  } from "react-router-dom";
+import { Route, Routes} from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { selectIsLoggedIn, selectIsRefreshing } from './redux/auth/selectors';
-import { persistor } from './redux/store';
 import { refreshUser } from './redux/auth/operations';
+import RestrictedRoute from "./components/RestrictedRoute";
+import PrivateRoute from "./components/PrivateRoute";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const RegistrationPage = lazy(() => import("./pages/RegistrationPage"));
@@ -26,10 +27,6 @@ export default function App() {
   }, [dispatch, isLoggedIn]);
 
   useEffect(() => {
-    persistor.persist(); 
-  }, []);
-
-  useEffect(() => {
     dispatch(refreshUser())
   }, [dispatch])
 
@@ -43,9 +40,24 @@ export default function App() {
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegistrationPage />} />
-          <Route path="/login" element={isLoggedIn ? <Navigate to="/contacts" /> : <LoginPage />} />
-          <Route path="/contacts" element={isLoggedIn ? <ContactsPage /> : <Navigate to="/login" />} />
+          <Route
+            path="/register"
+            element={
+              <RestrictedRoute component={<RegistrationPage />} redirectTo="/" />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <RestrictedRoute component={<LoginPage />} redirectTo="/contacts" />
+            }
+          />
+          <Route
+            path="/contacts"
+            element={
+              <PrivateRoute component={<ContactsPage />} redirectTo="/login" />
+            }
+          />
         </Routes>
       </Suspense>
     </Layout>
