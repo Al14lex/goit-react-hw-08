@@ -5,12 +5,10 @@ import { ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
 import { addContact } from '../../redux/contacts/operations';
 
-
 const FeedbackSchema = Yup.object().shape({
   username: Yup.string().matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ").min(3, "Too Short!").max(50, "Too Long!").required("Required"),
   tel: Yup.string().matches(/^\d+$/, "Only numbers are allowed for this field ").min(3, "Too Short!").max(50, "Too Long!").required("Required"),
 });
-
 
 export default function ContactForm () {
 const nameFieldId = useId();
@@ -20,20 +18,7 @@ const dispatch = useDispatch();
   const handleSubmit = async(values, actions) => {
     try {
       const { username, tel } = values;
-
-      const response = await fetch("https://66616c5d63e6a0189fe9c159.mockapi.io/contacts", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: username, phone: tel }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add contact');
-      }
-
-      const newContact = await response.json();
+      const newContact = { name: username, number: tel };
       dispatch(addContact(newContact));
       actions.resetForm();
     }catch (error) {
